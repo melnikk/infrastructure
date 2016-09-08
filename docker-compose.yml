@@ -1,6 +1,6 @@
 version: '2'
 services:
-  #----------------------------------- Cassanra cluster example
+  #------------------------------------------- Cassanra cluster example
   #cassandra1:
   #  build: ./docker/cassandra
   #  restart: "on-failure:100"
@@ -29,8 +29,8 @@ services:
   #  environment:
   #    CASSANDRA_SEEDS: "172.16.238.10"
 
-#----------------------------------------- Metrics
-  # Graphite - metric DB
+  #------------------------------------------- Metrics
+  # Graphite + Carbon - metric DB and receiver
   graphite:
     image: nickstenning/graphite
       networks:
@@ -62,7 +62,7 @@ services:
         - INTERVAL=5
       networks:
         - tools
-#----------------------------------------- Logs
+#--------------------------------------------- Logs
 # Elasticsearch - log DB
   elasticsearch:
     image: elasticsearch:2.3
@@ -112,7 +112,7 @@ services:
       tools:
         ipv4_address: 172.16.237.50
 
-#------------------------------------------- Networking
+#---------------------------------------------- Networking
 networks:
   tools:
     driver: bridge
