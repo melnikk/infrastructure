@@ -13,6 +13,11 @@ Check and edit services part of `docker-compose.yml`, then setup your environmen
 docker-compose up -d
 ```
 
+Check and edit your `inventory` file, then provision your containers:
+```
+ansible-playbook -i inventory provision.yml
+```
+
 Analyze your logs in [Kibana](https://github.com/elastic/kibana) interface available at:
 ```
 http://172.16.237.50:5601

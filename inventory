@@ -1,7 +1,7 @@
 [cassandra]
-infrastructure_cassandra1_1
-infrastructure_cassandra2_1
-infrastructure_cassandra3_1
+#infrastructure_cassandra1_1
+#infrastructure_cassandra2_1
+#infrastructure_cassandra3_1
 
 [grafana]
 infrastructure_grafana_1
