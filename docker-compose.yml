@@ -33,6 +33,7 @@ services:
   # Graphite + Carbon - metric DB and receiver
   graphite:
     image: nickstenning/graphite
+    restart: "unless-stopped"
     networks:
       metrics:
         ipv4_address: 172.15.200.4
@@ -42,6 +43,7 @@ services:
   # Grafana - metric visualization
   grafana:
     image: grafana/grafana
+    restart: "unless-stopped"
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_USERS_ALLOW_SIGN_UP: "false"
@@ -53,6 +55,7 @@ services:
   # Diamond - metric collector
   diamond:
       image: lesaux/diamond-containercollector
+      restart: "unless-stopped"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
         - /proc:/host_proc:ro
@@ -66,6 +69,7 @@ services:
 # Elasticsearch - log DB
   elasticsearch:
     image: elasticsearch:2.3
+    restart: "unless-stopped"
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     networks:
@@ -75,6 +79,7 @@ services:
 # Logstash - log receiver
   logstash:
     image: logstash:2.3
+    restart: "unless-stopped"
     command: -f /opt/logstash/logstash.conf
     depends_on:
       - elasticsearch
@@ -89,7 +94,7 @@ services:
 # Logspout - docker log collector
   logspout:
     build: ./docker/logspout
-    restart: "on-failure:100"
+    restart: "unless-stopped"
     environment:
       ROUTE_URIS: "logstash+tcp://logstash:5000"
       DEBUG: "true"
@@ -104,6 +109,7 @@ services:
 # Kibana - log vizualizer
   kibana:
     image: kibana:4.5
+    restart: "unless-stopped"
     depends_on:
       - elasticsearch
     environment:
