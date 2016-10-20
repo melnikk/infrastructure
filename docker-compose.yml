@@ -33,22 +33,22 @@ services:
   # Graphite + Carbon - metric DB and receiver
   graphite:
     image: nickstenning/graphite
-      networks:
-        app:
-          ipv4_address: 172.16.238.4
-        tools:
-          ipv4_address: 172.16.237.4
+    networks:
+      metrics:
+        ipv4_address: 172.15.200.4
+      logs:
+        ipv4_address: 172.15.100.4
 
   # Grafana - metric visualization
   grafana:
     image: grafana/grafana
-      environment:
-        GF_AUTH_ANONYMOUS_ENABLED: "true"
-        GF_USERS_ALLOW_SIGN_UP: "false"
-        GF_METRICS_GRAPHITE_ADDRESS: "graphite"
-      networks:
-        tools:
-          ipv4_address: 172.16.237.30
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_METRICS_GRAPHITE_ADDRESS: "graphite"
+    networks:
+      metrics:
+        ipv4_address: 172.15.200.30
 
   # Diamond - metric collector
   diamond:
@@ -61,7 +61,7 @@ services:
         - DOCKER_HOSTNAME=nodename
         - INTERVAL=5
       networks:
-        - tools
+        - metrics
 #--------------------------------------------- Logs
 # Elasticsearch - log DB
   elasticsearch:
@@ -69,8 +69,8 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     networks:
-      tools:
-        ipv4_address: 172.16.237.20
+      logs:
+        ipv4_address: 172.15.100.20
 
 # Logstash - log receiver
   logstash:
@@ -79,8 +79,8 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      tools:
-        ipv4_address: 172.16.237.25
+      logs:
+        ipv4_address: 172.15.100.25
     environment:
       LOGSPOUT: ignore
     volumes:
@@ -98,8 +98,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      tools:
-        ipv4_address: 172.16.237.15
+      logs:
+        ipv4_address: 172.15.100.15
 
 # Kibana - log vizualizer
   kibana:
@@ -109,26 +109,26 @@ services:
     environment:
       NODE_OPTIONS: "--max-old-space-size=300"
     networks:
-      tools:
-        ipv4_address: 172.16.237.50
+      logs:
+        ipv4_address: 172.15.100.50
 
 #---------------------------------------------- Networking
 networks:
-  tools:
+  logs:
     driver: bridge
     driver_opts:
       com.docker.network.enable_ipv6: "false"
     ipam:
       driver: default
       config:
-      - subnet: 172.16.237.0/24
-        gateway: 172.16.237.1
-  app:
+      - subnet: 172.15.100.0/24
+        gateway: 172.15.100.1
+  metrics:
     driver: bridge
     driver_opts:
       com.docker.network.enable_ipv6: "false"
     ipam:
       driver: default
       config:
-      - subnet: 172.16.238.0/24
-        gateway: 172.16.238.1
+      - subnet: 172.15.200.0/24
+        gateway: 172.15.200.1

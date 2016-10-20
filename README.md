@@ -1,7 +1,7 @@
 Observable Docker Infrastructure
 ================================
 
-Basic, self-monitored and logged Docker ecosystem. You need [Docker](https://github.com/docker/docker) 
+Basic, self-monitored and logged Docker ecosystem. You need [Docker](https://github.com/docker/docker)
 and [Ansible](https://github.com/ansible/ansible) to deal with it.
 
 Setup environment
@@ -20,19 +20,19 @@ ansible-playbook -i inventory provision.yml
 
 Analyze your logs in [Kibana](https://github.com/elastic/kibana) interface available at:
 ```
-http://172.16.237.50:5601
+http://172.15.100.50:5601
 ```
 
 Check your metrics in [Grafana](https://github.com/grafana/grafana) interface available at:
 ```
-http://172.16.237.30:3000
+http://172.15.200.30:3000
 ```
 
 Troubleshooting
 ---------------
 
 1. Elasticsearch didn't start with `vm.max_map_count` error:
-	
+
 	Run on your host machine:
 	```
 	sudo sysctl -w vm.max_map_count=262144
